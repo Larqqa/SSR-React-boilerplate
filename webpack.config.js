@@ -1,17 +1,14 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals')
 
-const config = {
-	entry: ['@babel/polyfill', './src/index.js'],
-	output: {
-		path: path.resolve(__dirname, 'build'),
-		filename: 'main.js'
-	},
-	devServer: {
-		contentBase: path.resolve(__dirname, 'public'),
-		compress: true,
-		port: 3000,
-	},
+const client = {
 	devtool: 'source-map',
+	entry: ['@babel/polyfill', './src/app/index.js'],
+	output: {
+		path: path.resolve(__dirname, 'build/app'),
+		filename: 'main.js',
+		publicPath: '/',
+	},
 	module: {
 		rules: [
 			{
@@ -33,4 +30,35 @@ const config = {
 	}
 };
 
-module.exports = config;
+const server = {
+	devtool: 'source-map',
+	entry: './src/server.js',
+	output: {
+		path: path.resolve(__dirname, 'build'),
+		filename: 'server.js',
+		publicPath: '/',
+	},
+	target: 'node',
+	node: {
+		__dirname: false,
+		__filename: false,
+	},
+	externals: [nodeExternals()],
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'babel-loader',
+				query: {
+					presets: ['@babel/preset-react', '@babel/preset-env'],
+				},
+			},
+		],
+	}
+};
+
+module.exports = [
+	client,
+	server
+];
