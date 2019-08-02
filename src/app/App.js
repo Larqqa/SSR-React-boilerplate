@@ -1,7 +1,7 @@
-import React from 'react'
-import { Switch, Link } from 'react-router-dom'
-import { renderRoutes } from 'react-router-config'
-import routes from './Routes'
+import React from 'react';
+import { Switch, Link } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
+import routes from './Routes';
 
 const App = () => (
 	<div>
@@ -12,6 +12,6 @@ const App = () => (
 			{renderRoutes(routes)}
 		</Switch>
 	</div>
-)
+);
 
-export default App
+export default App;

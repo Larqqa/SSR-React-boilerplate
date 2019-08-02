@@ -1,16 +1,20 @@
 {
-  "name": "webpack-boilerplate",
+  "name": "webpack-react-ssr-boilerplate",
   "version": "0.0.1",
-  "description": "Boilerplate for using Webpack and React",
+  "description": "Boilerplate for using Webpack and SSR React",
   "license": "MIT",
   "scripts": {
-    "build": "webpack",
-    "server": "nodemon build/server.js --watch",
-    "watch": "webpack --watch",
-    "start": "npm-run-all --parallel server watch"
+    "start": "npm run build && node build/server.js",
+    "dev": "npm run build:dev && npm-run-all -p watch:*",
+    "build": "rm -rf build && webpack --mode=production",
+    "build:dev": "rm -rf build && webpack --mode=development",
+    "watch:app": "webpack --watch --mode=development",
+    "watch:web": "webpack-dev-server --mode=development --inline --hot",
+    "watch:server": "nodemon ./build/server.js"
   },
   "dependencies": {
-    "ejs": "^2.6.2",
+    "axios": "^0.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "normalize.css": "^8.0.1",
     "react": "^16.8.6",

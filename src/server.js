@@ -1,44 +1,37 @@
-import path from 'path'
-import express from 'express'
-import React from 'react'
-import { renderToString } from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom'
-import { matchRoutes } from 'react-router-config'
-import App from './app/App'
-import routes from './app/Routes'
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
-const app = express()
-app.set('view engine', 'ejs')
-app.use(express.static('./build'))
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
+
+import App from './app/App';
+const getR = require('./controllers/get');
+
+
+// Create app and set serve folder
+const app = express();
+app.use(cors());
+app.use(express.static('build'));
+
+app.use(bodyParser.json());
+app.use('/api/get', getR);
 
 app.get('*', (req, res) => {
-	const branch = matchRoutes(routes, req.url)
-	const promises = []
 
-	branch.forEach( ({route, match}) => {
-		if (route.loadData)
-			promises.push(route.loadData(match))
-	})
+	// Create the app with routes
+	const html = renderToString(
+		<StaticRouter location={req.url}>
+			<App/>
+		</StaticRouter>
+	);
 
-	Promise.all(promises).then(data => {
-		const context = data.reduce( (context, data) => {
-			return Object.assign(context, data)
-		}, {})
-
-		const html = renderToString(
-			<StaticRouter location={req.url} context={context} >
-				<App/>
-			</StaticRouter>
-		)
-
-		if(context.url) {
-			res.writeHead(301, {Location: context.url})
-			res.end()
-		}
-		return res.send(
-			`
-			<!DOCTYPE html>
-			<html lang="en">
+	// Send HTML response
+	return res.send(
+		`
+		<!DOCTYPE html>
+		<html lang="en">
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,17 +40,16 @@ app.get('*', (req, res) => {
 			</head>
 			<body>
 				<div id="root">${html}</div>
-				<script src="/app/main.js"></script>
+				<script src="/app/bundle.js"></script>
 			</body>
-			</html>
-			`
-		)
-	}).catch(er => console.log(er))
-})
+		</html>
+		`
+	).end();
+});
 
 // Run server
-const port = process.env.PORT || 3000
+const port = 3000;
 app.listen(port, err => {
-	if (err) return console.error(err)
-	console.log(`Server listening at http://localhost:${port}`)
-})
+	if (err) return console.error(err);
+	console.log(`Server listening to: ${port} 😎`);
+});

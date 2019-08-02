@@ -1,13 +1,33 @@
 const path = require('path');
-const nodeExternals = require('webpack-node-externals')
+const nodeExternals = require('webpack-node-externals');
 
 const client = {
+
+	// Map source files for better errors
 	devtool: 'source-map',
 	entry: ['@babel/polyfill', './src/app/index.js'],
 	output: {
-		path: path.resolve(__dirname, 'build/app'),
-		filename: 'main.js',
-		publicPath: '/',
+		path: path.join(__dirname, './build/app/'),
+		filename: 'bundle.js',
+	},
+	devServer: {
+
+		// Points to folder with static files
+		contentBase: path.join(__dirname, './build/'),
+
+		// For live reload
+		watchContentBase: true,
+		compress: true,
+
+		// Enable proxy
+		// Gets data served from express server running on port 3000 
+		proxy: {
+			'/': {
+				target: 'http://localhost:3000',
+				secure: false
+			}
+		},
+		port: 3001
 	},
 	module: {
 		rules: [
@@ -34,9 +54,8 @@ const server = {
 	devtool: 'source-map',
 	entry: './src/server.js',
 	output: {
-		path: path.resolve(__dirname, 'build'),
+		path: path.join(__dirname, './build/'),
 		filename: 'server.js',
-		publicPath: '/',
 	},
 	target: 'node',
 	node: {
@@ -58,7 +77,4 @@ const server = {
 	}
 };
 
-module.exports = [
-	client,
-	server
-];
+module.exports = [client, server];

@@ -1,19 +1,27 @@
 import React, {useState} from 'react';
+import getService from '../services/get';
 
-const Home = (props) => {
-  const [click, setClick] = useState(0);
+const Home = () => {
+	const [click, setClick] = useState(0);
 
-  const handleClick = () => {
-    setClick(click + 1)
-  }
+	const handleClick = () => {
+		setClick(click + 1);
+	};
 
-  return (
-    <h1>
-      Hello im in home
-      clicks{click}
-      <button onClick={handleClick}>click</button>
-    </h1>
-  );
-}
+	const handleGet = () => {
+		getService.getAll().then(
+			data => console.log(data)
+		);
+	};
+
+	return (
+		<div>
+			<h1>Hello im home</h1>
+			<p>clicks on this shizz: {click}</p>
+			<button onClick={handleClick}>click</button>
+			<button onClick={handleGet}>get</button>
+		</div>
+	);
+};
 
 export default Home;

@@ -1,16 +1,23 @@
-import Home from './components/Home'
-import About from './components/About'
+import Home from './components/Home';
+import About from './components/About';
 
 const routes = [
-	{ path: '/',
+	{
+		path: '/',
 		exact: true,
-		component: Home,
+		component: Home
 	},
-	{ path: '/about',
+	{
+		path: '/about',
 		exact: true,
 		component: About,
 		data: 'Moi'
 	},
-]
+	{
+		path: '/about/:id',
+		exact: true,
+		component: About,
+	},
+];
 
-export default routes
+export default routes;
