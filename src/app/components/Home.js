@@ -22,6 +22,7 @@ const Home = (props) => {
     </div>
   );
 };
+
 const mapStateToProps = (state) => {
   return {
     clicks: state,

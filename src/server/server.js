@@ -42,7 +42,7 @@ app.get('*', (req, res) => {
     .replace('<!-- script -->', '/bundle.js')
     .replace(
       '<!-- preload -->',
-      `<script id="init">window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(/</g,'\\u003c')}</script>`);
+      `<script id="init">window.__PRELOAD__ = ${JSON.stringify(store.getState()).replace(/</g,'\\u003c')}</script>`);
 
   // Send HTML response
   return res.send(html).end();

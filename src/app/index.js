@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import getRed from './reducers/get';
 
-const preload = window.__PRELOADED_STATE__;
-delete window.__PRELOADED_STATE__;
+const preload = window.__PRELOAD__;
+delete window.__PRELOAD__;
 document.getElementById('init').remove();
 
 const store = createStore(getRed, preload);

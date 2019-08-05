@@ -4,7 +4,7 @@
   "description": "Boilerplate for using Webpack and SSR React",
   "license": "MIT",
   "scripts": {
-    "start": "npm run build && node build/server.js",
+    "start": "node build/server.js",
     "dev": "npm-run-all devBuild:* && npm-run-all -p watch:*",
     "build": "rm -rf build && npm-run-all build:*",
     "build:server": "webpack --config=webpack.server.js --mode=production",
@@ -12,8 +12,8 @@
     "devBuild:server": "webpack --config=webpack.server.js --mode=development",
     "devBuild:cli": "webpack --config=webpack.client.js --mode=development",
     "watch:server": "webpack --watch --config=webpack.server.js --mode=development",
-    "watch:nodemon": "nodemon ./build/server.js",
-    "watch:web": "webpack-dev-server --open --disable-host-check --config=webpack.client.js --mode=development"
+    "watch:nodemon": "nodemon ./devBuild/server.js",
+    "watch:web": "webpack-dev-server --open --config=webpack.client.js --mode=development"
   },
   "dependencies": {
     "axios": "^0.19.0",
