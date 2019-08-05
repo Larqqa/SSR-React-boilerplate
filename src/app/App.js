@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { initializeGet } from './reducers/get';
+
 import { Switch, Link } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import routes from './Routes';
 
-const App = () => (
-  <div>
-    <Link to="/">Home</Link>
-    <Link to="/about">About</Link>
+const App = (props) => {
+  useEffect(() => {
+    props.initializeGet();
+  },[props]);
 
-    <Switch>
-      {renderRoutes(routes)}
-    </Switch>
-  </div>
-);
+  return (
+    <div>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
 
-export default App;
+      <Switch>
+        {renderRoutes(routes)}
+      </Switch>
+    </div>
+  );
+};
+
+export default connect(null, { initializeGet })(App);

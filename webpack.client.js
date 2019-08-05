@@ -1,19 +1,18 @@
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
 
-const client = {
+module.exports = {
 
   // Map source files for better errors
   devtool: 'source-map',
   entry: ['@babel/polyfill', './src/app/index.js'],
   output: {
-    path: path.join(__dirname, './build/app/'),
+    path: path.join(__dirname, './build'),
     filename: 'bundle.js',
   },
   devServer: {
 
     // Points to folder with static files
-    contentBase: path.join(__dirname, './build/'),
+    contentBase: path.join(__dirname, './build'),
 
     // For live reload
     watchContentBase: true,
@@ -28,7 +27,11 @@ const client = {
         secure: false
       }
     ],
-    port: 3001
+    port: 3001,
+    overlay: {
+      warnings: true,
+      errors: true
+    }
   },
   module: {
     rules: [
@@ -60,52 +63,3 @@ const client = {
     ],
   }
 };
-
-const server = {
-  devtool: 'source-map',
-  entry: './src/server.js',
-  output: {
-    path: path.join(__dirname, './build/'),
-    filename: 'server.js',
-  },
-  target: 'node',
-  node: {
-    __dirname: false,
-    __filename: false,
-  },
-  externals: [nodeExternals()],
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            '@babel/preset-react',
-            [
-              '@babel/preset-env',
-              {
-                'targets': {
-                  'node': '10'
-                }
-              }
-            ]
-          ],
-        },
-      },
-      {
-        test: /\.(html)$/,
-        use: {
-          loader: 'html-loader',
-          options: {
-            minimize: true,
-            removeComments: false,
-          }
-        }
-      }
-    ],
-  }
-};
-
-module.exports = [client, server];
